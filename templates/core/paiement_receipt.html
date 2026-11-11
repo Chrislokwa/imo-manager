@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load preferences %}
+{% block title %}Reçu de paiement #{{ paiement.pk }} · Imo Manager{% endblock %}
+{% block header_title %}Reçu de paiement{% endblock %}
+{% block content %}
+<style>
+@media print {
+    body { background: #fff !important; }
+    aside, header, .no-print { display: none !important; }
+    main { padding: 0 !important; }
+    .receipt { max-width: none !important; border: 0 !important; box-shadow: none !important; }
+}
+</style>
+<div class="mx-auto max-w-3xl space-y-5">
+    <div class="no-print flex items-center justify-between">
+        <a href="{% url 'paiements_list' %}" class="text-sm font-medium text-blue-600 hover:underline">← Retour aux paiements</a>
+        <button type="button" onclick="window.print()" class="rounded-lg bg-slate-900 px-4 py-2 font-medium text-white hover:bg-slate-700">Imprimer / Enregistrer en PDF</button>
+    </div>
+    <article class="receipt rounded-xl border border-gray-200 bg-white p-8 shadow-sm sm:p-12">
+        <div class="flex flex-col gap-4 border-b border-gray-200 pb-6 sm:flex-row sm:items-start sm:justify-between">
+            <div><p class="text-sm font-semibold uppercase tracking-widest text-blue-700">Imo Manager</p><h2 class="mt-2 text-3xl font-bold text-slate-900">Reçu de loyer</h2><p class="mt-2 text-sm text-gray-500">Reçu n° {{ paiement.pk }} · Émis le {% user_date paiement.date_paiement %}</p></div>
+            <span class="w-fit rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800">Paiement reçu</span>
+        </div>
+        <div class="grid gap-8 py-8 sm:grid-cols-2">
+            <section><h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">Payé par</h3><p class="mt-2 text-lg font-semibold text-slate-900">{{ paiement.contrat.locataire.prenom }} {{ paiement.contrat.locataire.nom }}</p><p class="mt-1 text-sm text-gray-600">{{ paiement.contrat.locataire.email }}</p></section>
+            <section><h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">Bien concerné</h3><p class="mt-2 text-lg font-semibold text-slate-900">{{ paiement.contrat.propriete.nom }}</p><p class="mt-1 text-sm text-gray-600">{{ paiement.contrat.propriete.adresse }}</p></section>
+        </div>
+        <dl class="divide-y divide-gray-100 border-y border-gray-100">
+            <div class="flex justify-between gap-4 py-4"><dt class="text-gray-600">Mois de loyer concerné</dt><dd class="text-right font-medium text-slate-900">{{ paiement.mois_concerne }}</dd></div>
+            <div class="flex justify-between gap-4 py-4"><dt class="text-gray-600">Date de règlement</dt><dd class="text-right font-medium text-slate-900">{% user_date paiement.date_paiement %}</dd></div>
+            <div class="flex justify-between gap-4 py-4"><dt class="text-gray-600">Mode de paiement</dt><dd class="text-right font-medium text-slate-900">{{ paiement.methode }}</dd></div>
+        </dl>
+        <div class="mt-6 flex items-end justify-between gap-4 rounded-lg bg-slate-50 p-5"><p class="font-semibold text-slate-700">Montant reçu</p><p class="text-3xl font-bold text-slate-900">{% money paiement.montant %}</p></div>
+        <p class="mt-8 text-center text-xs text-gray-500">Ce reçu confirme l'enregistrement du paiement dans Imo Manager.</p>
+    </article>
+</div>
+{% endblock %}

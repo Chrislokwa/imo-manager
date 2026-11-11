@@ -1,0 +1,18 @@
+{% load preferences %}
+<tr id="paiement-retard-{{ paiement.pk }}" class="transition hover:bg-rose-50/30">
+    <td class="px-5 py-4 sm:px-6"><a href="{% url 'locataire_detail' paiement.contrat.locataire_id %}" class="font-semibold text-slate-900 hover:text-indigo-700">{{ paiement.contrat.locataire }}</a><p class="mt-1 text-xs text-slate-500">{{ paiement.contrat.propriete.nom }}</p></td>
+    <td class="px-4 py-4">{{ paiement.mois_concerne }}</td>
+    <td class="px-4 py-4">{% user_date paiement.date_echeance %}</td>
+    <td class="px-4 py-4"><span class="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700">{{ paiement.jours_retard }} jour{{ paiement.jours_retard|pluralize:'s' }}</span></td>
+    <td class="px-4 py-4 font-semibold">{% money paiement.montant %}</td>
+    <td class="px-5 py-4 sm:px-6">
+        {% if paiement.rappel_envoye %}
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700"><svg class="imo-icon h-3.5 w-3.5"><use href="#icon-check"></use></svg>Rappel envoyé</span>
+            <p class="mt-1 text-xs text-slate-500">{% user_date paiement.date_rappel %}</p>
+        {% else %}
+            <form method="post" action="{% url 'paiement_marquer_rappel' paiement.pk %}" hx-post="{% url 'paiement_marquer_rappel' paiement.pk %}" hx-target="#paiement-retard-{{ paiement.pk }}" hx-swap="outerHTML">
+                {% csrf_token %}<button type="submit" class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-indigo-700"><svg class="imo-icon h-3.5 w-3.5"><use href="#icon-check"></use></svg>Marquer envoyé</button>
+            </form>
+        {% endif %}
+    </td>
+</tr>

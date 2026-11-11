@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Locataires · Imo Manager{% endblock %}
+{% block header_title %}Locataires{% endblock %}
+{% block content %}
+<div class="space-y-6">
+    <section class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div><p class="text-sm text-slate-500">Annuaire et suivi des baux</p><div class="mt-1 flex items-center gap-2"><h2 class="text-2xl font-bold tracking-tight text-slate-900">Vos locataires</h2><span class="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">{{ locataires|length }}</span></div></div>
+        <a href="{% url 'locataire_create' %}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/15 transition hover:-translate-y-0.5 hover:bg-indigo-700"><svg class="imo-icon h-[1.1rem] w-[1.1rem]"><use href="#icon-plus"></use></svg>Ajouter un locataire</a>
+    </section>
+
+    <section class="imo-card p-4 sm:p-5">
+        <form method="get" action="{% url 'locataires_list' %}" class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <label for="recherche-locataire" class="sr-only">Rechercher un locataire</label>
+            <div class="relative flex-1"><svg class="imo-icon absolute left-4 top-1/2 h-[1.1rem] w-[1.1rem] -translate-y-1/2 text-slate-400"><use href="#icon-search"></use></svg><input id="recherche-locataire" type="search" name="q" value="{{ recherche }}" placeholder="Rechercher par nom ou téléphone…" hx-get="{% url 'locataires_list' %}" hx-trigger="keyup changed delay:300ms, search" hx-target="#locataires-rows" hx-include="this" class="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-3 pl-11 pr-4 text-sm placeholder:text-slate-400 focus:bg-white"></div>
+            <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800"><svg class="imo-icon h-4 w-4"><use href="#icon-search"></use></svg>Rechercher</button>
+        </form>
+    </section>
+
+    <section class="imo-card overflow-hidden">
+        <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-6"><div><h3 class="font-bold text-slate-900">Annuaire des locataires</h3><p class="mt-0.5 text-xs text-slate-500">Coordonnées et logement en cours</p></div><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 text-violet-600"><svg class="imo-icon"><use href="#icon-users"></use></svg></span></div>
+        <div class="overflow-x-auto"><table class="w-full min-w-[700px] text-left">
+            <thead class="bg-slate-50/80 text-[.68rem] font-bold uppercase tracking-[.12em] text-slate-500"><tr><th class="px-5 py-3.5 sm:px-6">Locataire</th><th class="px-4 py-3.5">Téléphone</th><th class="px-4 py-3.5">E-mail</th><th class="px-5 py-3.5 sm:px-6">Bien occupé</th></tr></thead>
+            <tbody id="locataires-rows" class="divide-y divide-slate-100 text-sm text-slate-700">{% include 'core/_locataires_rows.html' %}</tbody>
+        </table></div>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load preferences %}
+{% block title %}Paiements · Imo Manager{% endblock %}
+{% block header_title %}Paiements{% endblock %}
+{% block content %}
+<div class="space-y-6">
+    <section class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div><p class="text-sm text-slate-500">Encaissements et suivi des loyers</p><h2 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">Historique des paiements</h2></div>
+        <div class="flex flex-wrap gap-2"><a href="{% url 'paiements_retard' %}" class="inline-flex items-center justify-center gap-2 rounded-xl border border-rose-200 bg-white px-4 py-3 text-sm font-semibold text-rose-700 transition hover:bg-rose-50"><svg class="imo-icon h-4 w-4"><use href="#icon-alert"></use></svg>Retards</a><a href="{% url 'paiement_create' %}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/15 transition hover:-translate-y-0.5 hover:bg-indigo-700"><svg class="imo-icon h-4 w-4"><use href="#icon-plus"></use></svg>Enregistrer un paiement</a></div>
+    </section>
+    <section class="imo-card overflow-hidden">
+        <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-6"><div><h3 class="font-bold text-slate-900">Transactions</h3><p class="mt-0.5 text-xs text-slate-500">Historique complet des règlements enregistrés</p></div><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600"><svg class="imo-icon"><use href="#icon-wallet"></use></svg></span></div>
+        <div class="overflow-x-auto"><table class="w-full min-w-[850px] text-left">
+            <thead class="bg-slate-50/80 text-[.68rem] font-bold uppercase tracking-[.12em] text-slate-500"><tr><th class="px-5 py-3.5 sm:px-6">Locataire / bien</th><th class="px-4 py-3.5">Période</th><th class="px-4 py-3.5">Date</th><th class="px-4 py-3.5">Mode</th><th class="px-4 py-3.5">Montant</th><th class="px-4 py-3.5">Statut</th><th class="px-5 py-3.5 text-right sm:px-6">Reçu</th></tr></thead>
+            <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
+                {% for paiement in paiements %}
+                <tr class="transition hover:bg-indigo-50/30">
+                    <td class="px-5 py-4 sm:px-6"><a href="{% url 'locataire_detail' paiement.contrat.locataire_id %}" class="font-semibold text-slate-900 hover:text-indigo-700">{{ paiement.contrat.locataire }}</a><p class="mt-1 text-xs text-slate-500">{{ paiement.contrat.propriete.nom }}</p></td>
+                    <td class="px-4 py-4">{{ paiement.mois_concerne }}</td><td class="px-4 py-4">{% user_date paiement.date_paiement %}</td><td class="px-4 py-4">{{ paiement.methode }}</td><td class="px-4 py-4 font-semibold text-slate-900">{% money paiement.montant %}</td>
+                    <td class="px-4 py-4">{% if paiement.statut == 'Payé' %}<span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Payé</span>{% elif paiement.statut == 'En retard' %}<span class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700"><span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>En retard</span>{% else %}<span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700"><span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>En attente</span>{% endif %}</td>
+                    <td class="px-5 py-4 text-right sm:px-6">{% if paiement.statut == 'Payé' %}<a href="{% url 'paiement_receipt' paiement.pk %}" class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-50"><svg class="imo-icon h-4 w-4"><use href="#icon-receipt"></use></svg>Reçu</a>{% else %}<span class="text-slate-300">—</span>{% endif %}</td>
+                </tr>
+                {% empty %}<tr><td colspan="7" class="px-6 py-14 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-500"><svg class="imo-icon h-6 w-6"><use href="#icon-wallet"></use></svg></span><p class="mt-4 font-semibold text-slate-800">Aucun paiement enregistré</p><p class="mt-1 text-sm text-slate-500">Les paiements de loyer apparaîtront ici.</p><a href="{% url 'paiement_create' %}" class="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-indigo-700 hover:underline">Enregistrer un paiement<svg class="imo-icon h-4 w-4"><use href="#icon-arrow-right"></use></svg></a></td></tr>{% endfor %}
+            </tbody>
+        </table></div>
+    </section>
+</div>
+{% endblock %}

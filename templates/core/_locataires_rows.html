@@ -1,0 +1,10 @@
+{% for locataire in locataires %}
+<tr class="transition hover:bg-indigo-50/30">
+    <td class="px-5 py-4 sm:px-6"><div class="flex items-center gap-3"><span class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-violet-100 to-indigo-100 text-sm font-bold text-indigo-700">{{ locataire.prenom|slice:':1'|upper }}{{ locataire.nom|slice:':1'|upper }}</span><a href="{% url 'locataire_detail' locataire.pk %}" class="font-semibold text-slate-900 transition hover:text-indigo-700">{{ locataire.prenom }} {{ locataire.nom }}</a></div></td>
+    <td class="px-4 py-4"><a href="tel:{{ locataire.telephone }}" class="inline-flex items-center gap-2 text-slate-600 hover:text-indigo-700"><svg class="imo-icon h-4 w-4 text-slate-400"><use href="#icon-phone"></use></svg>{{ locataire.telephone }}</a></td>
+    <td class="px-4 py-4"><a href="mailto:{{ locataire.email }}" class="inline-flex items-center gap-2 text-slate-600 hover:text-indigo-700"><svg class="imo-icon h-4 w-4 text-slate-400"><use href="#icon-mail"></use></svg>{{ locataire.email }}</a></td>
+    <td class="px-5 py-4 sm:px-6">{% if locataire.contrat_en_cours %}<a href="{% url 'bien_detail' locataire.contrat_en_cours.propriete_id %}" class="inline-flex items-center gap-2 font-medium text-indigo-700 hover:underline"><svg class="imo-icon h-4 w-4"><use href="#icon-building"></use></svg>{{ locataire.contrat_en_cours.propriete.nom }}</a>{% else %}<span class="text-slate-400">Aucun bien attribué</span>{% endif %}</td>
+</tr>
+{% empty %}
+<tr><td colspan="4" class="px-6 py-14 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-50 text-violet-500"><svg class="imo-icon h-6 w-6"><use href="#icon-users"></use></svg></span><p class="mt-4 font-semibold text-slate-800">Aucun locataire trouvé</p><p class="mt-1 text-sm text-slate-500">Essayez un autre nom ou numéro de téléphone.</p></td></tr>
+{% endfor %}

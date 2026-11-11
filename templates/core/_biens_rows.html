@@ -1,0 +1,16 @@
+{% load preferences %}
+{% for bien in biens %}
+<tr id="bien-{{ bien.pk }}" class="transition hover:bg-indigo-50/30">
+    <td class="px-5 py-4 sm:px-6"><a class="font-semibold text-slate-900 transition hover:text-indigo-700" href="{% url 'bien_detail' bien.pk %}">{{ bien.nom }}</a><div class="mt-1 flex max-w-sm items-center gap-1.5 truncate text-xs text-slate-500"><svg class="imo-icon h-3.5 w-3.5 text-slate-400"><use href="#icon-pin"></use></svg>{{ bien.adresse }}</div></td>
+    <td class="px-4 py-4"><span class="rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-semibold text-slate-600">{{ bien.type_bien }}</span></td>
+    <td class="px-4 py-4 font-semibold text-slate-800">{% money bien.loyer_base %}</td>
+    <td class="px-4 py-4">{% if bien.est_occupe %}<span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Occupé</span>{% else %}<span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700"><span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>Vacant</span>{% endif %}</td>
+    <td class="px-5 py-4 sm:px-6"><div class="flex items-center justify-end gap-1.5">
+        <a href="{% url 'bien_detail' bien.pk %}" class="rounded-lg p-2 text-slate-500 transition hover:bg-indigo-50 hover:text-indigo-700" title="Voir la fiche" aria-label="Voir la fiche de {{ bien.nom }}"><svg class="imo-icon h-[1.1rem] w-[1.1rem]"><use href="#icon-arrow-right"></use></svg></a>
+        <a href="{% url 'bien_update' bien.pk %}" class="rounded-lg p-2 text-slate-500 transition hover:bg-indigo-50 hover:text-indigo-700" title="Modifier" aria-label="Modifier {{ bien.nom }}"><svg class="imo-icon h-[1.1rem] w-[1.1rem]"><use href="#icon-edit"></use></svg></a>
+        <form method="post" action="{% url 'bien_delete' bien.pk %}" hx-post="{% url 'bien_delete' bien.pk %}" hx-target="#bien-{{ bien.pk }}" hx-swap="outerHTML" onsubmit="return confirm('Supprimer définitivement ce bien ?')">{% csrf_token %}<button type="submit" class="rounded-lg p-2 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600" title="Supprimer" aria-label="Supprimer {{ bien.nom }}"><svg class="imo-icon h-[1.1rem] w-[1.1rem]"><use href="#icon-trash"></use></svg></button></form>
+    </div></td>
+</tr>
+{% empty %}
+<tr><td colspan="5" class="px-6 py-14 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-500"><svg class="imo-icon h-6 w-6"><use href="#icon-building"></use></svg></span><p class="mt-4 font-semibold text-slate-800">Aucun bien trouvé</p><p class="mt-1 text-sm text-slate-500">Ajoutez un bien ou choisissez un autre filtre.</p></td></tr>
+{% endfor %}

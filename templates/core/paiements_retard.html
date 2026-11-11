@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Retards et rappels · Imo Manager{% endblock %}
+{% block header_title %}Retards & rappels{% endblock %}
+{% block content %}
+<div class="space-y-6">
+    <section class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div><p class="text-sm text-slate-500">Suivi des échéances dépassées</p><h2 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">Loyers en retard</h2><p class="mt-2 text-sm text-slate-500">Après avoir relancé le locataire, notez le rappel comme envoyé.</p></div>
+        <a href="{% url 'paiements_list' %}" class="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"><svg class="imo-icon h-4 w-4"><use href="#icon-history"></use></svg>Tous les paiements</a>
+    </section>
+    <section class="imo-card overflow-hidden">
+        <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4 sm:px-6"><div><h3 class="font-bold text-slate-900">Échéances à traiter</h3><p class="mt-0.5 text-xs text-slate-500">L’impayé est calculé à partir de la date d’échéance</p></div><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-50 text-rose-600"><svg class="imo-icon"><use href="#icon-alert"></use></svg></span></div>
+        <div class="overflow-x-auto"><table class="w-full min-w-[850px] text-left">
+            <thead class="bg-slate-50/80 text-[.68rem] font-bold uppercase tracking-[.12em] text-slate-500"><tr><th class="px-5 py-3.5 sm:px-6">Locataire / bien</th><th class="px-4 py-3.5">Mois</th><th class="px-4 py-3.5">Échéance</th><th class="px-4 py-3.5">Retard</th><th class="px-4 py-3.5">Montant dû</th><th class="px-5 py-3.5 sm:px-6">Rappel</th></tr></thead>
+            <tbody class="divide-y divide-slate-100 text-sm text-slate-700">{% for paiement in paiements %}{% include 'core/_paiement_retard_row.html' %}{% empty %}<tr><td colspan="6" class="px-6 py-14 text-center"><span class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600"><svg class="imo-icon h-6 w-6"><use href="#icon-check-circle"></use></svg></span><p class="mt-4 font-semibold text-slate-800">Aucun loyer en retard</p><p class="mt-1 text-sm text-slate-500">Les échéances impayées apparaîtront ici.</p></td></tr>{% endfor %}</tbody>
+        </table></div>
+    </section>
+</div>
+{% endblock %}

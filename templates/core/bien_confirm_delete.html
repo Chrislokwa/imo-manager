@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Supprimer un bien · Imo Manager{% endblock %}
+{% block header_title %}Supprimer un bien{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-xl">
+    <section class="imo-card overflow-hidden">
+        <div class="flex items-center gap-4 border-b border-slate-100 px-6 py-5 sm:px-8"><span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-rose-50 text-rose-600"><svg class="imo-icon h-5 w-5"><use href="#icon-trash"></use></svg></span><div><h2 class="text-lg font-bold text-slate-900">Confirmer la suppression</h2><p class="mt-0.5 text-sm text-slate-500">Cette action ne peut pas être annulée.</p></div></div>
+        <div class="p-6 sm:p-8"><p class="leading-7 text-slate-600">Voulez-vous vraiment supprimer le bien <strong class="text-slate-900">« {{ bien.nom }} »</strong> ?</p><form method="post" class="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">{% csrf_token %}<a href="{% url 'biens_list' %}" class="rounded-xl border border-slate-200 px-4 py-2.5 text-center text-sm font-semibold text-slate-600 transition hover:bg-slate-50">Annuler</a><button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-700"><svg class="imo-icon h-4 w-4"><use href="#icon-trash"></use></svg>Supprimer le bien</button></form></div>
+    </section>
+</div>
+{% endblock %}

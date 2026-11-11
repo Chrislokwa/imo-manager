@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Paramètres · Imo Manager{% endblock %}
+{% block header_title %}Préférences utilisateur{% endblock %}
+{% block content %}
+<div class="mx-auto max-w-2xl space-y-5">
+    <section class="imo-card overflow-hidden">
+        <div class="flex items-center gap-4 border-b border-slate-100 px-6 py-5 sm:px-8"><span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600"><svg class="imo-icon h-5 w-5"><use href="#icon-settings"></use></svg></span><div><h2 class="text-lg font-bold text-slate-900">Préférences d’affichage</h2><p class="mt-0.5 text-sm text-slate-500">Personnalisez les montants et les dates visibles dans l’application.</p></div></div>
+        <form method="post" class="space-y-5 p-6 sm:p-8">
+            {% csrf_token %}
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="mb-1.5 block text-sm font-semibold text-slate-700">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}<p class="mt-1 text-sm text-rose-600">{{ error }}</p>{% endfor %}
+            </div>
+            {% endfor %}
+            <div class="rounded-xl bg-indigo-50/70 p-4 text-sm leading-6 text-indigo-900"><div class="flex gap-3"><svg class="imo-icon mt-0.5 h-5 w-5 flex-none text-indigo-600"><use href="#icon-alert"></use></svg><p>Le choix de devise modifie le symbole affiché ; il ne convertit pas les montants enregistrés.</p></div></div>
+            <button type="submit" class="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-indigo-700"><svg class="imo-icon h-4 w-4"><use href="#icon-check"></use></svg>Enregistrer les préférences</button>
+        </form>
+    </section>
+</div>
+{% endblock %}

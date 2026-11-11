@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load preferences %}
+
+{% block title %}{{ locataire.prenom }} {{ locataire.nom }} · Imo Manager{% endblock %}
+{% block header_title %}Fiche locataire{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-4xl space-y-6">
+    <a href="{% url 'locataires_list' %}" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-indigo-700"><svg class="imo-icon h-4 w-4 rotate-180"><use href="#icon-arrow-right"></use></svg>Retour aux locataires</a>
+    <section class="imo-card p-6 sm:p-8">
+        <div class="flex items-center gap-4"><span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-100 to-indigo-100 text-lg font-bold text-indigo-700">{{ locataire.prenom|slice:':1'|upper }}{{ locataire.nom|slice:':1'|upper }}</span><div><p class="text-xs font-bold uppercase tracking-[.13em] text-indigo-600">Fiche locataire</p><h2 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">{{ locataire.prenom }} {{ locataire.nom }}</h2></div></div>
+        <dl class="mt-7 grid gap-4 sm:grid-cols-2">
+            <div class="rounded-xl bg-slate-50/80 p-4"><dt class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500"><svg class="imo-icon h-4 w-4"><use href="#icon-phone"></use></svg>Téléphone</dt><dd class="mt-2 font-semibold text-slate-800"><a href="tel:{{ locataire.telephone }}" class="hover:text-indigo-700">{{ locataire.telephone }}</a></dd></div>
+            <div class="rounded-xl bg-slate-50/80 p-4"><dt class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500"><svg class="imo-icon h-4 w-4"><use href="#icon-mail"></use></svg>E-mail</dt><dd class="mt-2 break-all font-semibold text-slate-800"><a href="mailto:{{ locataire.email }}" class="hover:text-indigo-700">{{ locataire.email }}</a></dd></div>
+            <div class="rounded-xl bg-slate-50/80 p-4"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Contact d’urgence</dt><dd class="mt-2 font-semibold text-slate-800">{{ locataire.contact_urgence|default:'Non renseigné' }}</dd></div>
+            <div class="rounded-xl bg-slate-50/80 p-4"><dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Locataire depuis</dt><dd class="mt-2 font-semibold text-slate-800">{% user_date locataire.date_arrivee %}</dd></div>
+        </dl>
+    </section>
+
+    <section class="imo-card p-6 sm:p-7">
+        <div class="flex items-center gap-3"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600"><svg class="imo-icon"><use href="#icon-building"></use></svg></span><h3 class="text-lg font-bold text-slate-900">Bien actuellement loué</h3></div>
+        {% if contrat_en_cours %}
+        <div class="mt-4 rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/70 to-white p-5">
+            <a href="{% url 'bien_detail' contrat_en_cours.propriete_id %}" class="text-lg font-semibold text-blue-700 hover:underline">{{ contrat_en_cours.propriete.nom }}</a>
+            <p class="mt-1 text-sm text-gray-600">{{ contrat_en_cours.propriete.adresse }}</p>
+            <p class="mt-3 text-sm text-gray-600">Bail du {% user_date contrat_en_cours.date_debut %} au {% user_date contrat_en_cours.date_fin %} · {% money contrat_en_cours.loyer_mensuel %} / mois</p>
+        </div>
+        {% else %}<p class="mt-3 text-sm text-gray-500">Aucun bail actif pour ce locataire aujourd'hui.</p>{% endif %}
+    </section>
+
+    <section class="imo-card p-6 sm:p-7">
+        <div class="flex items-center gap-3"><span class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-600"><svg class="imo-icon"><use href="#icon-history"></use></svg></span><h3 class="text-lg font-bold text-slate-900">Historique des contrats</h3></div>
+        <div class="mt-4 divide-y divide-gray-100">
+            {% for contrat in contrats %}
+            <div class="flex flex-col gap-1 py-4 sm:flex-row sm:items-center sm:justify-between"><div><a href="{% url 'bien_detail' contrat.propriete_id %}" class="font-medium text-blue-700 hover:underline">{{ contrat.propriete.nom }}</a><p class="text-sm text-gray-500">{% user_date contrat.date_debut %} – {% user_date contrat.date_fin %}</p></div><span class="text-sm font-semibold">{% money contrat.loyer_mensuel %} / mois</span></div>
+            {% empty %}<p class="py-4 text-sm text-gray-500">Aucun contrat enregistré.</p>{% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

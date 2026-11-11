@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Connexion · Imo Manager{% endblock %}
+
+{% block content %}
+<section class="grid w-full max-w-4xl overflow-hidden rounded-[1.5rem] border border-white bg-white shadow-2xl shadow-indigo-950/10 md:grid-cols-[.9fr_1.1fr]">
+    <div class="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-[#171a3b] via-[#28255a] to-[#5145c8] p-9 text-white md:flex">
+        <div class="absolute -right-20 -top-16 h-64 w-64 rounded-full border-[32px] border-white/[.06]"></div>
+        <div class="relative flex items-center gap-3"><span class="flex h-11 w-11 items-center justify-center rounded-xl bg-white/15"><svg class="imo-icon h-6 w-6"><use href="#icon-home"></use></svg></span><div><p class="font-bold tracking-tight">Imo Manager</p><p class="text-[.65rem] font-semibold uppercase tracking-[.16em] text-indigo-200">Gestion immobilière</p></div></div>
+        <div class="relative py-12"><p class="text-sm font-medium text-indigo-200">Votre activité, plus claire.</p><h2 class="mt-3 max-w-xs text-3xl font-bold leading-tight tracking-tight">Gérez vos biens en toute simplicité.</h2><p class="mt-4 max-w-sm text-sm leading-6 text-indigo-100/75">Retrouvez vos propriétés, vos baux et vos paiements au même endroit.</p></div>
+        <p class="relative text-xs text-indigo-200/70">Un espace de gestion conçu pour vous.</p>
+    </div>
+
+    <div class="p-6 sm:p-10 lg:p-12">
+        <div class="mb-8 md:hidden"><span class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 text-white"><svg class="imo-icon h-6 w-6"><use href="#icon-home"></use></svg></span></div>
+        <p class="text-sm font-semibold text-indigo-700">Bienvenue</p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">Connectez-vous à Imo</h1>
+        <p class="mt-2 text-sm leading-6 text-slate-500">Accédez à votre espace de gestion immobilière.</p>
+
+        {% if form.errors %}<p class="mt-6 rounded-xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm text-rose-700" role="alert">Identifiant ou mot de passe incorrect. Veuillez réessayer.</p>{% endif %}
+        {% if next and user.is_authenticated %}<p class="mt-6 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3 text-sm text-amber-800" role="alert">Votre compte n’a pas accès à cette page.</p>{% endif %}
+
+        <form method="post" class="mt-7 space-y-5">
+            {% csrf_token %}<input type="hidden" name="next" value="{{ next }}">
+            <div><label for="id_username" class="mb-1.5 block text-sm font-semibold text-slate-700">Nom d’utilisateur</label><input id="id_username" name="username" type="text" autocomplete="username" required autofocus class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"></div>
+            <div><label for="id_password" class="mb-1.5 block text-sm font-semibold text-slate-700">Mot de passe</label><input id="id_password" name="password" type="password" autocomplete="current-password" required class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"></div>
+            <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Se connecter<svg class="imo-icon h-4 w-4"><use href="#icon-arrow-right"></use></svg></button>
+        </form>
+        <p class="mt-7 text-center text-xs text-slate-400">Connexion sécurisée par Django</p>
+    </div>
+</section>
+{% endblock %}
